@@ -25,12 +25,12 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.1.0'
 
   spec.add_runtime_dependency 'commander'
-  spec.add_runtime_dependency 'tty-prompt', '~> 0.11.0'
-  spec.add_runtime_dependency 'tty-spinner', '~> 0.4.1'
-  spec.add_runtime_dependency 'tty-progressbar', '~> 0.10.1'
+  spec.add_runtime_dependency 'tty-prompt'#, '~> 0.11.0'
+  spec.add_runtime_dependency 'tty-spinner'#, '~> 0.4.1'
+  spec.add_runtime_dependency 'tty-progressbar'#, '~> 0.10.1'
   spec.add_runtime_dependency 'rubyzip'
   spec.add_runtime_dependency 'pastel'
-  spec.add_runtime_dependency 'bundler', '~> 1.11'
+  spec.add_runtime_dependency 'bundler', '~> 1.16'
 
   spec.add_development_dependency 'rake'
 end
