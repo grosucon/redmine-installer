@@ -260,6 +260,43 @@ module RedmineInstaller
 
     def move_from(other_redmine)
       Dir.chdir(other_redmine.root) do
+
+        # Bundler save plugin with absolute paths
+        # which is not pointing to the temporary directory
+        bundle_index = File.join(Dir.pwd, '.bundle/plugin/index')
+
+        if File.exist?(bundle_index)
+          index = YAML.load_file(bundle_index)
+
+          # { load_paths: { PLUGIN_NAME: *PATHS } }
+          #
+          if index.has_key?('load_paths')
+            load_paths = index['load_paths']
+            if load_paths.is_a?(Hash)
+              load_paths.each do |_, paths|
+                paths.each do |path|
+                  path.sub!(other_redmine.root, root)
+                end
+              end
+            end
+          end
+
+          # { plugin_paths: { PLUGIN_NAME: PATH } }
+          #
+          if index.has_key?('plugin_paths')
+            plugin_paths = index['plugin_paths']
+            if plugin_paths.is_a?(Hash)
+              plugin_paths.each do |_, path|
+                path.sub!(other_redmine.root, root)
+              end
+            end
+          end
+
+          File.write(bundle_index, index.to_yaml)
+
+          logger.info("Bundler plugin index from #{other_redmine.root} into #{root}")
+        end
+
         Dir.entries('.').each do |entry|
           next if entry == '.' || entry == '..'
 
