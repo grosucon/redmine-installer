@@ -57,7 +57,7 @@ RSpec.describe 'RedmineInstaller backup / restore', order: :defined do
     FileUtils.cp(dump, DATABASE_DUMP)
   end
 
-  it 'restore', command: 'install', args: [package_v310, '--database-dump', DATABASE_DUMP] do
+  it 'restore', command: 'install', args: [package_v345, '--database-dump', DATABASE_DUMP] do
     expected_output('Path to redmine root:')
     write(@redmine_root)
 

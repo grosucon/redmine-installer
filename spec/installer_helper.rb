@@ -22,13 +22,15 @@ module InstallerHelper
 
   # Be carefull - this could have later unpredictable consequences on stdin
   def select_choice
-    @process.write(' ')
-    # @process.write("\r")
+    # @process.write(' ')
+    @process.write("\r")
     # @process.write("\r\n")
   end
 
   def go_down
-    write(TTY::Prompt::Reader::Codes.keys[:down])
+    # write(TTY::Reader::Keys.keys[:down])
+    # write("\e[B")
+    @process.write("\e[B")
   end
 
   def expected_successful_configuration

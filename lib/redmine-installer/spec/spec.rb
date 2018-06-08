@@ -29,13 +29,10 @@ class TestPrompt < TTY::Prompt
 
 end
 
-class TTY::Prompt::Reader::Console
+class TTY::Reader::Console
 
   def get_char(options)
-    return input.getc unless input.tty?
-    mode.raw(options[:raw]) do
-      mode.echo(options[:echo]) { input.getc }
-    end
+    input.getc
   end
 
 end

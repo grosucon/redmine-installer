@@ -36,7 +36,7 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
   end
 
   it 'install without arguments', args: [] do
-    regular_package = File.expand_path(File.join(File.dirname(__FILE__), '..', 'packages', 'redmine-3.1.0.zip'))
+    regular_package = File.expand_path(File.join(File.dirname(__FILE__), '..', 'packages', 'redmine-3.4.5.zip'))
 
     expected_output('Path to redmine root:')
     write(@redmine_root)
@@ -49,20 +49,20 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
     expected_successful_configuration
     expected_successful_installation
 
-    expected_redmine_version('3.1.0')
+    expected_redmine_version('3.4.5')
   end
 
-  it 'download redmine', args: ['v3.1.1'] do
+  it 'download redmine', args: ['v3.4.5'] do
     expected_output('Path to redmine root:')
     write(@redmine_root)
 
-    expected_output_in('Downloading http://www.redmine.org/releases/redmine-3.1.1.zip', 30)
+    expected_output_in('Downloading http://www.redmine.org/releases/redmine-3.4.5.zip', 30)
     expected_output('Extracting redmine package')
 
     expected_successful_configuration
     expected_successful_installation
 
-    expected_redmine_version('3.1.1')
+    expected_redmine_version('3.4.5')
   end
 
   it 'installing something else', args: [package_someting_else] do
@@ -79,18 +79,18 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
     go_down
     go_down
     expected_output('‣ Cancel')
-    write(' ')
+    write('')
 
     expected_output('Operation canceled by user')
   end
 
-  it 'bad database settings', args: [package_v310] do
+  it 'bad database settings', args: [package_v345] do
     write(@redmine_root)
 
     expected_output('Creating database configuration')
     go_down
     expected_output('‣ PostgreSQL')
-    write(' ')
+    write('')
 
     write('test')
     write('')
@@ -101,7 +101,7 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
     write('')
 
     expected_output('Creating email configuration')
-    write(' ')
+    write('')
 
     expected_output('Redmine installing')
     expected_output_in('--> Database migrating', 60)
@@ -111,11 +111,12 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
     go_down
     go_down
     expected_output('‣ Change database configuration')
-    write(' ')
+    write('')
+
 
     go_down
     expected_output('‣ PostgreSQL')
-    write(' ')
+    write('')
 
     write('test')
     write('')
@@ -128,7 +129,7 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
     expected_output('--> Database migrating')
     expected_output_in('Redmine was installed', 60)
 
-    expected_redmine_version('3.1.0')
+    expected_redmine_version('3.4.5')
   end
 
 end

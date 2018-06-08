@@ -21,7 +21,7 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
     write(@redmine_root)
 
     expected_output('Path to package:')
-    write(package_v320)
+    write(package_v345)
 
     expected_output('Extracting redmine package')
     expected_output('Data backup')
@@ -39,7 +39,7 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
 
     expected_successful_upgrade
 
-    expected_redmine_version('3.2.0')
+    expected_redmine_version('3.4.5')
 
     expect(File.exist?(test_test_file)).to be_falsey
 
@@ -61,7 +61,7 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
     write(@redmine_root)
 
     wait_for_stdin_buffer
-    write(package_v320)
+    write(package_v345)
 
     wait_for_stdin_buffer
 
@@ -75,7 +75,7 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
 
     expected_successful_upgrade
 
-    expected_redmine_version('3.2.0')
+    expected_redmine_version('3.4.5')
 
     expect(File.exist?(test_test_file)).to be_truthy
   end
@@ -89,7 +89,7 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
     write(@redmine_root)
 
     wait_for_stdin_buffer
-    write(package_v320)
+    write(package_v345)
 
     wait_for_stdin_buffer
 
@@ -103,7 +103,7 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
 
     expected_successful_upgrade
 
-    expected_redmine_version('3.2.0')
+    expected_redmine_version('3.4.5')
 
     # Not bullet-prof but at least check if files are still there
     expect(Dir.glob(File.join(files_dir, '*.txt')).sort).to eq(files.sort)
