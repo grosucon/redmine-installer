@@ -109,4 +109,37 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
     expect(Dir.glob(File.join(files_dir, '*.txt')).sort).to eq(files.sort)
   end
 
+  it 'upgrade rys and modify bundle/index' do
+    wait_for_stdin_buffer
+    write(@redmine_root)
+
+    wait_for_stdin_buffer
+    write(package_v345_rys)
+
+    wait_for_stdin_buffer
+
+    go_down
+    go_down
+    expected_output('‣ Nothing')
+    select_choice
+
+    expected_output('Are you sure you dont want backup?')
+    write('y')
+
+    expected_successful_upgrade
+
+    expected_redmine_version('3.4.5')
+
+    index = YAML.load_file(File.join(@redmine_root, '.bundle/plugin/index'))
+
+    load_paths = index['load_paths']['rys-bundler']
+    expect(load_paths.size).to eq(1)
+
+    load_path = load_paths.first
+    expect(load_path).to start_with(@redmine_root)
+
+    plugin_paths = index['plugin_paths']['rys-bundler']
+    expect(plugin_paths).to start_with(@redmine_root)
+  end
+
 end

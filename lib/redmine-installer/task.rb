@@ -9,6 +9,7 @@ module RedmineInstaller
 
       logger.info "#{class_name} initialized with #{options}"
       logger.info "RUBY_VERSION: #{RUBY_VERSION}"
+      logger.info "VERSION: #{RedmineInstaller::VERSION}"
       logger.info "USER: #{env_user}"
     end
 

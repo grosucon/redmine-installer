@@ -295,6 +295,8 @@ module RedmineInstaller
           File.write(bundle_index, index.to_yaml)
 
           logger.info("Bundler plugin index from #{other_redmine.root} into #{root}")
+        else
+          logger.info("Bundler plugin index from #{other_redmine.root} not found")
         end
 
         Dir.entries('.').each do |entry|

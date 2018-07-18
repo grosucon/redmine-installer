@@ -36,13 +36,11 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
   end
 
   it 'install without arguments', args: [] do
-    regular_package = File.expand_path(File.join(File.dirname(__FILE__), '..', 'packages', 'redmine-3.4.5.zip'))
-
     expected_output('Path to redmine root:')
     write(@redmine_root)
 
     expected_output('Path to package:')
-    write(regular_package)
+    write(package_v345)
 
     expected_output('Extracting redmine package')
 
