@@ -603,7 +603,9 @@ module RedmineInstaller
       end
 
       def rake_easyproject_install
-        status = run_command('RAILS_ENV=production bundle exec rake easyproject:install', 'Installing easyproject')
+        status = without_env('NAME') {
+          run_command('RAILS_ENV=production bundle exec rake easyproject:install', 'Installing easyproject')
+        }
 
         unless status
           puts
@@ -637,6 +639,14 @@ module RedmineInstaller
         else
           logger.info('Database dump loading was skipped.')
         end
+      end
+
+      def without_env(*names)
+        backup = ENV.clone.to_hash
+        ENV.delete_if {|key, _| names.include?(key) }
+        yield
+      ensure
+        ENV.replace(backup)
       end
 
   end
