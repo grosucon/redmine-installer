@@ -17,7 +17,8 @@ class InstallerProcess
       args << '--bundle-options' << '--without rmagick'
     end
 
-    @process = ChildProcess.build('bin/redmine', command, *args)
+    # @process = ChildProcess.build('bin/redmine', command, *args)
+    @process = ChildProcess.build('redmine', command, *args)
     @process.io.stdout = tempfile_out
     @process.io.stderr = tempfile_err
     @process.environment['REDMINE_INSTALLER_SPEC'] = '1'
@@ -35,8 +36,10 @@ class InstallerProcess
   end
 
   def run
-    start
-    yield
+    Bundler.with_clean_env {
+      start
+      yield
+    }
   ensure
     stop
   end

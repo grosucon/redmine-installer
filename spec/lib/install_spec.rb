@@ -2,15 +2,30 @@ require 'spec_helper'
 
 RSpec.describe RedmineInstaller::Install, command: 'install' do
 
-  it 'bad permission', args: [] do
+  it 'unreadable file', args: [] do
     FileUtils.chmod(0000, @redmine_root)
 
     expected_output('Path to redmine root:')
     write(@redmine_root)
 
-    expected_output('Redmine root contains inaccessible files')
+    expected_output('Application root contains unreadable files')
 
     FileUtils.chmod(0600, @redmine_root)
+  end
+
+  it 'unwritable directory', args: [] do
+    directory = File.join(@redmine_root, 'directory')
+    subdirectory = File.join(directory, 'subdirectory')
+
+    FileUtils.mkdir_p(subdirectory)
+    FileUtils.chmod(0444, directory)
+
+    expected_output('Path to redmine root:')
+    write(@redmine_root)
+
+    expected_output('Application root contains unreadable files')
+
+    FileUtils.chmod(0700, directory)
   end
 
   it 'non-existinig package', args: [] do
@@ -110,7 +125,6 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
     go_down
     expected_output('‣ Change database configuration')
     write('')
-
 
     go_down
     expected_output('‣ PostgreSQL')

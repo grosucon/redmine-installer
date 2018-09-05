@@ -10,6 +10,11 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
   end
 
   it 'upgrading with full backup' do
+    # This should not be a problem because file still could be deleted
+    unwritable_file = File.join(@redmine_root, 'unwritable_file')
+    FileUtils.touch(unwritable_file)
+    FileUtils.chmod(0400, unwritable_file)
+
     test_test_dir = File.join(@redmine_root, 'test_test')
     test_test_file = File.join(test_test_dir, 'test.txt')
     FileUtils.mkdir_p(test_test_dir)

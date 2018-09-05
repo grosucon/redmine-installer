@@ -116,20 +116,45 @@ module RedmineInstaller
 
       logger.info("REDMINE_ROOT: #{@root}")
 
-      inaccessible_files = []
+      unreadable_files = []
+      all_directories = []
 
       Find.find(@root).each do |item|
-        if !File.writable?(item) || !File.readable?(item)
-          inaccessible_files << item
+        if unreadable_files.size > CHECK_N_INACCESSIBLE_FILES
+          break
         end
 
-        if inaccessible_files.size > CHECK_N_INACCESSIBLE_FILES
-          break
+        # Installer only need read permission for a few files
+        # but for sure it checks all of them
+        if !File.readable?(item)
+          unreadable_files << item
+          next
+        end
+
+        # Actualy this permission should not be needed
+        # becase deletable is checked by parent directory
+        # if !File.writable?(item)
+        #   unreadable_files << item
+        # end
+
+        all_directories << File.dirname(item)
+      end
+
+      if unreadable_files.any?
+        error "Application root contains unreadable files. Make sure that all files in #{@root} are readable for user #{env_user} (limit #{CHECK_N_INACCESSIBLE_FILES} files: #{unreadable_files.join(', ')})"
+      end
+
+      unwritable_directories = []
+
+      all_directories.uniq!
+      all_directories.each do |item|
+        if !File.writable?(item)
+          unwritable_directories << item
         end
       end
 
-      if inaccessible_files.any?
-        error "Redmine root contains inaccessible files. Make sure that all files in #{@root} are readable/writeable for user #{env_user} (limit #{CHECK_N_INACCESSIBLE_FILES} files: #{inaccessible_files.join(', ')})"
+      if unwritable_directories.any?
+        error "Application root contains unwritable directories. Make sure that all directories in #{@root} are writable for user #{env_user} (limit #{CHECK_N_INACCESSIBLE_FILES} files: #{unwritable_directories.join(', ')})"
       end
     end
 
