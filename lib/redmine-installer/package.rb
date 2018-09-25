@@ -9,7 +9,7 @@ module RedmineInstaller
     SUPPORTED_ARCHIVE_FORMATS = ['.zip', '.gz', '.tgz']
     TAR_LONGLINK = '././@LongLink'
 
-    attr_reader :package
+    attr_reader :package, :temp_dir
 
     def initialize(task, package)
       super(task)

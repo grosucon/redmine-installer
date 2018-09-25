@@ -66,9 +66,10 @@ module InstallerHelper
     select_choice
   end
 
-  def expected_successful_installation_or_upgrade(db_creating: false)
+  def expected_successful_installation_or_upgrade(db_creating: false, after_create: nil)
     expected_output_in('--> Bundle install', 50)
     expected_output_in('--> Database creating', 50) if db_creating
+    after_create && after_create.call
     expected_output_in('--> Database migrating', 50)
     expected_output_in('--> Plugins migration', 50)
     expected_output_in('--> Generating secret token', 50)
@@ -79,9 +80,9 @@ module InstallerHelper
     expected_output('Moving installer log ... OK')
   end
 
-  def expected_successful_installation
+  def expected_successful_installation(**options)
     expected_output('Redmine installing')
-    expected_successful_installation_or_upgrade(db_creating: true)
+    expected_successful_installation_or_upgrade(db_creating: true, **options)
     expected_output('Redmine was installed')
   end
 

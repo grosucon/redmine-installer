@@ -204,7 +204,7 @@ module RedmineInstaller
         # Ensuring database
         rake_db_create
 
-        # Load database dump (if was set via CLI)
+        # Load database dump (if was set via CLI or attach on package)
         load_database_dump
 
         # Migrating
@@ -651,9 +651,7 @@ module RedmineInstaller
         Dir.entries(plugins_path).include?('easyproject')
       end
 
-      def load_database_dump
-        return if @database_dump_to_load.nil?
-
+      def load_database_dump_from_file
         selected = prompt.select('Database dump will be loaded. Before that all data must be destroy.',
           'Skip dump loading' => :cancel,
           'I am aware of this. Want to continue' => :continue)
@@ -663,6 +661,23 @@ module RedmineInstaller
           logger.info('Database dump was loaded.')
         else
           logger.info('Database dump loading was skipped.')
+        end
+      end
+
+      def load_database_dump_from_package
+        if !prompt.no?('Would you like to load default data? Warning: By choosing "yes", you are confirming that all your existing redmine data will be removed.')
+
+          @database.do_restore(task.package_config.sql_dump_file)
+
+          logger.info('Default database dump was loaded.')
+        end
+      end
+
+      def load_database_dump
+        if @database_dump_to_load
+          load_database_dump_from_file
+        elsif task.package_config.dump_attached? && task.package_config.dump_compatible?(@database)
+          load_database_dump_from_package
         end
       end
 

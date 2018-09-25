@@ -1,6 +1,8 @@
 module RedmineInstaller
   class Install < Task
 
+    attr_reader :package_config
+
     def initialize(package, redmine_root, **options)
       super(**options)
 
@@ -8,6 +10,7 @@ module RedmineInstaller
       @package = Package.new(self, package)
       @target_redmine = Redmine.new(self, redmine_root)
       @temp_redmine = Redmine.new(self)
+      @package_config = PackageConfig.new(@temp_redmine)
     end
 
     def up
@@ -18,6 +21,7 @@ module RedmineInstaller
       @package.extract
 
       @temp_redmine.root = @package.redmine_root
+      @package_config.check_version
 
       @temp_redmine.create_database_yml
       @temp_redmine.create_configuration_yml

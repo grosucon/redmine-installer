@@ -144,4 +144,32 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
     expected_redmine_version('3.4.5')
   end
 
+  it 'high installer version', args: [package_high_installer_version] do
+    write(@redmine_root)
+    expected_output('You are using an old version of installer')
+  end
+
+  it 'download redmine', args: [package_default_db] do
+    expected_output('Path to redmine root:')
+    write(@redmine_root)
+
+    expected_successful_configuration
+    expected_successful_installation(
+      after_create: proc {
+        expected_output('Would you like to load default data')
+        write('y')
+        expected_output('Database cleaning')
+        expected_output('Database restoring')
+      }
+    )
+
+    expected_redmine_version('3.4.5')
+
+    Dir.chdir(@redmine_root) do
+      out = `rails runner "puts Issue.count"`.strip
+      expect($?.success?).to be_truthy
+      expect(out).to eq('3')
+    end
+  end
+
 end

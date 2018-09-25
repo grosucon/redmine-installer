@@ -28,9 +28,10 @@ module RedmineInstaller
   autoload :Profile,       'redmine-installer/profile'
   autoload :Backup,        'redmine-installer/backup'
   autoload :RestoreDB,     'redmine-installer/restore_db'
+  autoload :PackageConfig, 'redmine-installer/package_config'
 
   # Settings
-  MIN_SUPPORTED_RUBY = '2.1.0'
+  MIN_SUPPORTED_RUBY = '2.2.0'
 
   def self.logger
     @logger ||= RedmineInstaller::Logger.new

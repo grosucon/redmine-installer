@@ -16,4 +16,12 @@ module PackagesHelper
     File.join(packages_dir, 'something-else.zip')
   end
 
+  def package_high_installer_version
+    File.join(packages_dir, 'high-installer-version.zip')
+  end
+
+  def package_default_db
+    File.join(packages_dir, 'redmine-3.4.5-default-db.zip')
+  end
+
 end
