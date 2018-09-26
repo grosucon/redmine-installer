@@ -164,10 +164,31 @@ module RedmineInstaller
 
           dest_file = nil
           tar.each do |entry|
+
             if entry.full_name == TAR_LONGLINK
               dest_file = File.join(@temp_dir, entry.read.strip)
               next
             end
+
+            # Pax header
+            # "%d %s=%s\n", <length>, <keyword>, <value>
+            if entry.header.typeflag == 'x'
+
+              pax_headers = entry.read.split("\n")
+              pax_headers.each do |header|
+                meta, value = header.split('=', 2)
+                length, keyword = meta.split(' ', 2)
+
+                if keyword == 'path'
+                  dest_file = File.join(@temp_dir, value)
+                  next
+                end
+              end
+
+              # If there is no header with keyword "path"
+              next
+            end
+
             dest_file ||= File.join(@temp_dir, entry.full_name)
             if entry.directory?
               FileUtils.rm_rf(dest_file) unless File.directory?(dest_file)
