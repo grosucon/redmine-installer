@@ -31,7 +31,7 @@ module RedmineInstaller
   autoload :PackageConfig, 'redmine-installer/package_config'
 
   # Settings
-  MIN_SUPPORTED_RUBY = '2.2.0'
+  MIN_SUPPORTED_RUBY = '2.3.0'
 
   def self.logger
     @logger ||= RedmineInstaller::Logger.new
