@@ -137,7 +137,10 @@ module RedmineInstaller
         #   unreadable_files << item
         # end
 
-        all_directories << File.dirname(item)
+        # Parent directory of the root can have any permission
+        if item != @root
+          all_directories << File.dirname(item)
+        end
       end
 
       if unreadable_files.any?
