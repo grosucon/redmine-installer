@@ -59,10 +59,11 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
 
     expected_output('Extracting redmine package')
 
-    expected_successful_configuration
+    expected_successful_configuration(email: true)
     expected_successful_installation
 
     expected_redmine_version('3.4.5')
+    expected_email_configuration
   end
 
   it 'download redmine', args: ['v3.4.5'] do

@@ -33,7 +33,7 @@ module RedmineInstaller
       end
 
       def get_parameters
-        @username = prompt.ask('Username:', required: true)
+        @user_name = prompt.ask('Username:', required: true)
         @password = prompt.mask('Password:', required: true)
       end
 
@@ -66,10 +66,11 @@ module RedmineInstaller
         settings['port']    = @port
 
         # Optional
-        settings['authentication']       = @authentication  unless @authentication.to_s.empty?
+        settings['authentication']       = @authentication.to_sym  unless @authentication.to_s.empty?
         settings['domain']               = @domain          unless @domain.to_s.empty?
         settings['user_name']            = @user_name       unless @user_name.to_s.empty?
         settings['password']             = @password        unless @password.to_s.empty?
+        settings['tls']                  = @enable_tls      unless @enable_tls.to_s.empty?
         settings['enable_starttls_auto'] = @enable_starttls unless @enable_starttls.to_s.empty?
         settings['openssl_verify_mode']  = @openssl_verify  unless @openssl_verify.to_s.empty?
 
@@ -77,7 +78,7 @@ module RedmineInstaller
       end
 
       def to_s
-        "<#{class_name} #{@username}@#{@address}:#{@port}>"
+        "<#{class_name} #{@user_name}@#{@address}:#{@port}>"
       end
 
     end
@@ -115,6 +116,7 @@ module RedmineInstaller
         @domain = prompt.ask('Domain:')
         @authentication = prompt.ask('Authentication:')
         @openssl_verify = prompt.ask('Openssl verify mode:')
+        @enable_tls = prompt.yes?('Enable tls?:', default: false)
         @enable_starttls = prompt.yes?('Enable starttls?:', default: true)
       end
 
