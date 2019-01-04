@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'commander'
   spec.add_runtime_dependency 'rubyzip'
-  spec.add_runtime_dependency 'bundler', '~> 1.16'
+  spec.add_runtime_dependency 'bundler', '>= 1.16'
   spec.add_runtime_dependency 'pastel', '~> 0.7.2'
   spec.add_runtime_dependency 'tty-prompt', '~> 0.16.1'
   spec.add_runtime_dependency 'tty-spinner', '~> 0.8.0'
