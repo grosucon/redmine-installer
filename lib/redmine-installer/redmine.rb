@@ -234,14 +234,14 @@ module RedmineInstaller
         # Install new gems
         bundle_install
 
+        # Generate secret token
+        rake_generate_secret_token
+
         # Migrating
         rake_db_migrate
 
         # Plugin migrating
         rake_redmine_plugin_migrate
-
-        # Generate secret token
-        rake_generate_secret_token
 
         # Install easyproject
         rake_easyproject_install if easyproject?
