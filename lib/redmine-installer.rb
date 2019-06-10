@@ -29,6 +29,7 @@ module RedmineInstaller
   autoload :Backup,        'redmine-installer/backup'
   autoload :RestoreDB,     'redmine-installer/restore_db'
   autoload :PackageConfig, 'redmine-installer/package_config'
+  autoload :Easycheck,     'redmine-installer/easycheck'
 
   # Settings
   MIN_SUPPORTED_RUBY = '2.3.0'
@@ -53,7 +54,7 @@ module RedmineInstaller
   /_/  \\__/\\_,_/_/_/_/_/_//_/\\__/
 
 
-  Powered by EasyRedmine
+  Powered by EasySoftware
 
     PRINT
   end

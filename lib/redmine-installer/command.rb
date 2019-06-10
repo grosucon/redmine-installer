@@ -13,6 +13,12 @@ module RedmineInstaller
     end
 
     def run
+      Bundler.with_clean_env do
+        run!
+      end
+    end
+
+    def run!
       success = false
 
       logger.std("--> #{cmd}")

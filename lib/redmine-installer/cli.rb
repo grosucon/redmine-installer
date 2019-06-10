@@ -20,7 +20,10 @@ module RedmineInstaller
       global_option('-d', '--debug', 'Logging message to stdout'){ $DEBUG = true }
       global_option('-s', '--silent', 'Be less version in output') { $SILENT_MODE = true }
       global_option('-e', '--env', 'For backward compatibility. Production is now always use.')
-      global_option('--skip-old-modifications', 'For backward compatibility. Missing modifications are now always copied.')
+      global_option('--run-easycheck', 'Run easycheck.sh from https://github.com/easyredmine/easy_server_requirements_check') do
+        RedmineInstaller::Easycheck.run
+      end
+
       default_command :help
 
 

@@ -20,6 +20,7 @@ module RedmineInstaller
 
       @temp_redmine.root = @package.redmine_root
       @package_config.check_version
+      @temp_redmine.validate
 
       @target_redmine.make_backup
 

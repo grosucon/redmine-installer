@@ -16,14 +16,14 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
 
   files = `git ls-files -z`.split("\x0")
-  files.delete_if{|f| f.start_with?('spec/packages/') }
+  files.delete_if {|f| f.start_with?('spec/packages/') }
 
   spec.files         = files
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.1.0'
+  spec.required_ruby_version = '>= 2.3.0'
 
   spec.add_runtime_dependency 'commander'
   spec.add_runtime_dependency 'rubyzip'

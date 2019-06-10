@@ -147,4 +147,55 @@ RSpec.describe RedmineInstaller::Upgrade, :install_first, command: 'upgrade' do
     expect(plugin_paths).to start_with(@redmine_root)
   end
 
+  it 'upgrading something else' do
+    wait_for_stdin_buffer
+    write(@redmine_root)
+
+    wait_for_stdin_buffer
+    write(package_someting_else)
+
+    wait_for_stdin_buffer
+    expected_output('is not valid')
+  end
+
+  context 'missing plugins' do
+
+    def upgrade_it(answer, result)
+      # Create some plugins
+      plugin_name = 'new_plugin'
+      plugin_dir = File.join(@redmine_root, 'plugins', plugin_name)
+      FileUtils.mkdir_p(plugin_dir)
+      FileUtils.touch(File.join(plugin_dir, 'init.rb'))
+
+      wait_for_stdin_buffer
+      write(@redmine_root)
+
+      wait_for_stdin_buffer
+      write(package_v345)
+
+      go_down
+      go_down
+      expected_output('‣ Nothing')
+      select_choice
+      write('y')
+
+      expected_output("Your application contains plugins that are not present in the package (#{plugin_name}). Would you like to copy them?")
+
+      write(answer)
+      expected_successful_upgrade
+      expected_redmine_version('3.4.5')
+
+      expect(Dir.exist?(plugin_dir)).to be(result)
+    end
+
+    it 'yes' do
+      upgrade_it('y', true)
+    end
+
+    it 'no' do
+      upgrade_it('n', false)
+    end
+
+  end
+
 end

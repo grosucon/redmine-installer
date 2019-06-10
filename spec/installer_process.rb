@@ -17,8 +17,11 @@ class InstallerProcess
       args << '--bundle-options' << '--without rmagick'
     end
 
+    redmine_bin_file = File.expand_path('../bin/redmine', __dir__)
+
+    @process = ChildProcess.build(redmine_bin_file, command, *args)
     # @process = ChildProcess.build('bin/redmine', command, *args)
-    @process = ChildProcess.build('redmine', command, *args)
+    # @process = ChildProcess.build('redmine', command, *args)
     @process.io.stdout = tempfile_out
     @process.io.stderr = tempfile_err
     @process.environment['REDMINE_INSTALLER_SPEC'] = '1'

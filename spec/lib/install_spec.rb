@@ -82,20 +82,7 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
   it 'installing something else', args: [package_someting_else] do
     write(@redmine_root)
 
-    expected_successful_configuration
-
-    expected_output('Redmine installing')
-    expected_output_in('--> Bundle install', 50)
-
-    expected_output("Gemfile.lock wasn't created")
-    expected_output('‣ Try again')
-
-    go_down
-    go_down
-    expected_output('‣ Cancel')
-    write('')
-
-    expected_output('Operation canceled by user')
+    expected_output('is not valid')
   end
 
   it 'bad database settings', args: [package_v345] do
@@ -158,6 +145,7 @@ RSpec.describe RedmineInstaller::Install, command: 'install' do
     expected_successful_installation(
       after_create: proc {
         expected_output('Would you like to load default data')
+
         write('y')
         expected_output('Database cleaning')
         expected_output('Database restoring')

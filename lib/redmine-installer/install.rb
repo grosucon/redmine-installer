@@ -17,11 +17,13 @@ module RedmineInstaller
       @temp_redmine.valid_options
       @environment.check
       @target_redmine.ensure_and_valid_root
+
       @package.ensure_and_valid_package
       @package.extract
 
       @temp_redmine.root = @package.redmine_root
       @package_config.check_version
+      @temp_redmine.validate
 
       @temp_redmine.create_database_yml
       @temp_redmine.create_configuration_yml

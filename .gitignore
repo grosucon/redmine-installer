@@ -27,3 +27,4 @@ test/*
 /redmine-installer-err
 /redmine-installer-out
 /redmine
+/gems.locked

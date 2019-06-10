@@ -395,11 +395,12 @@ module RedmineInstaller
       logger.info('Important files was copyied')
     end
 
-    # New package may not have all plugins
-    #
-    def copy_missing_plugins_from(other_redmine)
-      # Copy missing redmine plugins
-      Dir.chdir(other_redmine.plugins_path) do
+    def yield_missing_plugins(source_directory, target_directory)
+      if !Dir.exist?(source_directory)
+        return
+      end
+
+      Dir.chdir(source_directory) do
         Dir.entries('.').each do |plugin|
           next if plugin == '.' || plugin == '..'
 
@@ -408,28 +409,44 @@ module RedmineInstaller
             next
           end
 
-          to = File.join(plugins_path, plugin)
+          to = File.join(target_directory, plugin)
 
           # Plugins does not exist
           unless Dir.exist?(to)
-            FileUtils.cp_r(plugin, to)
+            yield File.expand_path(plugin), File.expand_path(to)
           end
         end
       end
+    end
 
-      # Copy missing client modification plugin
-      if easyproject?
-        old_modifications = Dir.glob(File.join(other_redmine.easy_plugins_path, 'modification_*'))
-        old_modifications.each do |old_modification_path|
-          next if !File.directory?(old_modification_path)
+    # New package may not have all plugins
+    #
+    def copy_missing_plugins_from(other_redmine)
+      missing = []
 
-          basename = File.basename(old_modification_path)
+      yield_missing_plugins(other_redmine.plugins_path, plugins_path) do |from, to|
+        missing << [from, to]
+      end
 
-          new_modification_path = File.join(easy_plugins_path, basename)
-          next if File.exist?(new_modification_path)
+      yield_missing_plugins(other_redmine.easy_plugins_path, easy_plugins_path) do |from, to|
+        missing << [from, to]
+      end
 
-          FileUtils.cp_r(old_modification_path, new_modification_path)
-        end
+      missing_plugin_names = missing.map{|(from, to)| File.basename(from) }
+      logger.info("Missing plugins: #{missing_plugin_names.join(', ')}")
+
+      if missing.empty?
+        return
+      end
+
+      puts
+      if !prompt.yes?("Your application contains plugins that are not present in the package (#{missing_plugin_names.join(', ')}). Would you like to copy them?")
+        return
+      end
+
+      missing.each do |(from, to)|
+        FileUtils.cp_r(from, to)
+        logger.info("Copied #{from} to #{to}")
       end
     end
 
@@ -438,7 +455,7 @@ module RedmineInstaller
       Dir.chdir(root) do
         REQUIRED_FILES.each do |path|
           unless File.exist?(path)
-            error "Redmine #{root} is not valid. Missing #{path}."
+            error "Redmine #{root} is not valid. Directory '#{path}' is missing."
           end
         end
       end

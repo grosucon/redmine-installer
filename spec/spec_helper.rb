@@ -1,3 +1,8 @@
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../gems.rb', __dir__)
+
+require 'bundler'
+Bundler.require(:default, :test)
+
 lib = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(lib) if !$LOAD_PATH.include?(lib)
 
