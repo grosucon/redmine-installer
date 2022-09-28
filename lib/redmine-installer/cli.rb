@@ -48,7 +48,7 @@ module RedmineInstaller
         c.action do |args, options|
           options.default(enable_user_root: false)
 
-          RedmineInstaller::Install.new(args[0], args[1], options.__hash__).run
+          RedmineInstaller::Install.new(args[0], args[1], **options.__hash__).run
         end
       end
       alias_command :i, :install
@@ -77,7 +77,7 @@ module RedmineInstaller
         c.action do |args, options|
           options.default(enable_user_root: false, copy_files_with_symlink: false)
 
-          RedmineInstaller::Upgrade.new(args[0], args[1], options.__hash__).run
+          RedmineInstaller::Upgrade.new(args[0], args[1], **options.__hash__).run
         end
       end
       alias_command :u, :upgrade
